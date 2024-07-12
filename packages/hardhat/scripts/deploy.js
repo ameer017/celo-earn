@@ -1,33 +1,35 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-const hre = require("hardhat");
+const { ethers } = require("hardhat");
+const fs = require("fs");
 
 async function main() {
-    const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-    const SIXTY_SECS = 60;
-    const unlockTime = currentTimestampInSeconds + SIXTY_SECS;
+  const [deployer] = await ethers.getSigners();
+  const balance = await deployer.getBalance();
+  console.log(`Deploying contracts with account: ${deployer.address}`);
+  console.log(`Account balance: ${balance.toString()}`);
 
-    const lockedAmount = hre.ethers.utils.parseEther("0.0001");
+  const initialPointsPerPurchase = 10; // Set your initial points per purchase
 
-    const Lock = await hre.ethers.getContractFactory("Lock");
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const Shop = await ethers.getContractFactory("DecentralizedShop");
+  const shop = await Shop.deploy(initialPointsPerPurchase);
 
-    console.log(`Unlock Time: ${unlockTime}`);
+  await shop.deployed();
 
-    await lock.deployed();
+  console.log(`DecentralizedShop deployed to: ${shop.address}`);
 
-    console.log(
-        `Lock with 0.0001 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-    );
+  const data = {
+    address: shop.address,
+    abi: JSON.parse(shop.interface.format("json")),
+  };
+
+  // Adjust the path as per your project structure
+  fs.writeFileSync("../Shop.json", JSON.stringify(data, null, 2));
+
+  console.log("ABI and address saved to ./src/Shop.json");
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
     console.error(error);
-    process.exitCode = 1;
-});
+    process.exit(1);
+  });

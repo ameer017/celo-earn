@@ -1,0 +1,495 @@
+{
+  "address": "0x07925C60408D5cca887a145d27eb1b8265FC3C16",
+  "abi": [
+    {
+      "type": "constructor",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_pointsPerPurchase"
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "ProductAdded",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "id",
+          "indexed": false
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "price",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "seller",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "ProductPurchased",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "id",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "buyer",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "RewardAdded",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "id",
+          "indexed": false
+        },
+        {
+          "type": "string",
+          "name": "description",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "pointsRequired",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "RewardClaimed",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "id",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "claimer",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "addProduct",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_name"
+        },
+        {
+          "type": "string",
+          "name": "_description"
+        },
+        {
+          "type": "uint256",
+          "name": "_price"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "addReward",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_description"
+        },
+        {
+          "type": "uint256",
+          "name": "_pointsRequired"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "claimReward",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_rewardId"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "getAllProducts",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "components": [
+            {
+              "type": "uint256",
+              "name": "id"
+            },
+            {
+              "type": "string",
+              "name": "name"
+            },
+            {
+              "type": "string",
+              "name": "description"
+            },
+            {
+              "type": "uint256",
+              "name": "price"
+            },
+            {
+              "type": "address",
+              "name": "seller"
+            },
+            {
+              "type": "bool",
+              "name": "isSold"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getAllRewards",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "components": [
+            {
+              "type": "uint256",
+              "name": "id"
+            },
+            {
+              "type": "string",
+              "name": "description"
+            },
+            {
+              "type": "uint256",
+              "name": "pointsRequired"
+            },
+            {
+              "type": "address",
+              "name": "claimer"
+            },
+            {
+              "type": "bool",
+              "name": "isClaimed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getProduct",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_productId"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "tuple",
+          "components": [
+            {
+              "type": "uint256",
+              "name": "id"
+            },
+            {
+              "type": "string",
+              "name": "name"
+            },
+            {
+              "type": "string",
+              "name": "description"
+            },
+            {
+              "type": "uint256",
+              "name": "price"
+            },
+            {
+              "type": "address",
+              "name": "seller"
+            },
+            {
+              "type": "bool",
+              "name": "isSold"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getReward",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_rewardId"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "tuple",
+          "components": [
+            {
+              "type": "uint256",
+              "name": "id"
+            },
+            {
+              "type": "string",
+              "name": "description"
+            },
+            {
+              "type": "uint256",
+              "name": "pointsRequired"
+            },
+            {
+              "type": "address",
+              "name": "claimer"
+            },
+            {
+              "type": "bool",
+              "name": "isClaimed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getUser",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_user"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "tuple",
+          "components": [
+            {
+              "type": "uint256",
+              "name": "points"
+            },
+            {
+              "type": "uint256[]",
+              "name": "purchasedProducts"
+            },
+            {
+              "type": "uint256[]",
+              "name": "claimedRewards"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "pointsPerPurchase",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "productCounter",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "products",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "name": "description"
+        },
+        {
+          "type": "uint256",
+          "name": "price"
+        },
+        {
+          "type": "address",
+          "name": "seller"
+        },
+        {
+          "type": "bool",
+          "name": "isSold"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "purchaseProduct",
+      "constant": false,
+      "stateMutability": "payable",
+      "payable": true,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_productId"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "rewardCounter",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "rewards",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "name": "description"
+        },
+        {
+          "type": "uint256",
+          "name": "pointsRequired"
+        },
+        {
+          "type": "address",
+          "name": "claimer"
+        },
+        {
+          "type": "bool",
+          "name": "isClaimed"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "users",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "points"
+        }
+      ]
+    }
+  ]
+}
