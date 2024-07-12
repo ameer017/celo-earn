@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import UserInfo from "./components/UserInfo";
 import Reward from "./components/Reward";
+import AddReward from "./components/AddReward";
 
 const App = () => {
   return (
@@ -48,6 +49,15 @@ const App = () => {
           element={
             <Layout>
               <Reward />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/add-reward"
+          element={
+            <Layout>
+              <AddReward />
             </Layout>
           }
         />

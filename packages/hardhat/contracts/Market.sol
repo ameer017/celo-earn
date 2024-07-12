@@ -6,6 +6,7 @@ contract DecentralizedShop {
     uint256 public productCounter;
     uint256 public rewardCounter;
     uint256 public pointsPerPurchase;
+    uint256 public rewardThreshold;
 
     struct Product {
         uint256 id;
@@ -38,10 +39,12 @@ contract DecentralizedShop {
     event ProductPurchased(uint256 id, address buyer);
     event RewardAdded(uint256 id, string description, uint256 pointsRequired);
     event RewardClaimed(uint256 id, address claimer);
+    event RewardWithdrawn(uint256 id, address claimer, uint256 amount);
 
-    constructor(uint256 _pointsPerPurchase) {
+    constructor(uint256 _pointsPerPurchase, uint256 _rewardThreshold) {
         owner = msg.sender;
         pointsPerPurchase = _pointsPerPurchase;
+        rewardThreshold = _rewardThreshold;
     }
 
     modifier onlyOwner() {
@@ -49,7 +52,11 @@ contract DecentralizedShop {
         _;
     }
 
-    function addProduct(string memory _name, string memory _description, uint256 _price) public {
+    function addProduct(
+        string memory _name,
+        string memory _description,
+        uint256 _price
+    ) public {
         productCounter++;
         products[productCounter] = Product(
             productCounter,
@@ -72,14 +79,36 @@ contract DecentralizedShop {
         users[msg.sender].points += pointsPerPurchase;
         users[msg.sender].purchasedProducts.push(_productId);
 
+        // Check if user has reached reward threshold
+        if (users[msg.sender].points >= rewardThreshold) {
+            rewardCounter++;
+            rewards[rewardCounter] = Reward(
+                rewardCounter,
+                "Reward for reaching points threshold",
+                rewardThreshold,
+                msg.sender,
+                false
+            );
+            emit RewardAdded(
+                rewardCounter,
+                "Reward for reaching points threshold",
+                rewardThreshold
+            );
+        }
+
         emit ProductPurchased(_productId, msg.sender);
     }
 
-    function getProduct(uint256 _productId) public view returns (Product memory) {
+    function getProduct(
+        uint256 _productId
+    ) public view returns (Product memory) {
         return products[_productId];
     }
 
-    function addReward(string memory _description, uint256 _pointsRequired) public onlyOwner {
+    function addReward(
+        string memory _description,
+        uint256 _pointsRequired
+    ) public onlyOwner {
         rewardCounter++;
         rewards[rewardCounter] = Reward(
             rewardCounter,
@@ -103,6 +132,16 @@ contract DecentralizedShop {
         reward.claimer = msg.sender;
 
         emit RewardClaimed(_rewardId, msg.sender);
+    }
+
+    function redeemReward(uint256 _rewardId, uint256 _amount) public {
+        Reward storage reward = rewards[_rewardId];
+        require(reward.claimer == msg.sender, "You did not claim this reward");
+        require(reward.isClaimed, "Reward is not claimed");
+
+        payable(msg.sender).transfer(_amount);
+
+        emit RewardWithdrawn(_rewardId, msg.sender, _amount);
     }
 
     function getReward(uint256 _rewardId) public view returns (Reward memory) {

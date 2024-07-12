@@ -1,4 +1,3 @@
-// src/components/UserInfo.js
 import React, { useEffect, useState } from "react";
 import contract from "../contract";
 import Sidebar from "./SideBar";
@@ -7,14 +6,17 @@ import { ethers } from "ethers";
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [rewards, setRewards] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [account, setAccount] = useState("");
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserData = async () => {
       const address = await contract.signer.getAddress();
       const userInfo = await contract.getUser(address);
+      setAccount(address);
 
-      // Create a new object with converted properties
       const formattedUser = {
         points: ethers.BigNumber.from(userInfo.points).toString(),
         purchasedProducts: userInfo.purchasedProducts.map((p) =>
@@ -26,8 +28,35 @@ const UserInfo = () => {
       };
 
       setUser(formattedUser);
+
+      const productDetails = await Promise.all(
+        formattedUser.purchasedProducts.map((productId) =>
+          contract.getProduct(productId)
+        )
+      );
+
+      const formattedProducts = productDetails.map((product) => ({
+        ...product,
+        price: ethers.BigNumber.from(product.price).toString(),
+      }));
+
+      setProducts(formattedProducts);
+
+      const rewardDetails = await Promise.all(
+        formattedUser.claimedRewards.map((rewardId) =>
+          contract.getReward(rewardId)
+        )
+      );
+
+      const formattedRewards = rewardDetails.map((reward) => ({
+        ...reward,
+        pointsRequired: ethers.BigNumber.from(reward.pointsRequired).toString(),
+      }));
+
+      setRewards(formattedRewards);
     };
-    fetchUser();
+
+    fetchUserData();
   }, []);
 
   const toggleSidebar = () => {
@@ -48,11 +77,26 @@ const UserInfo = () => {
           {sidebarOpen ? "" : <FaOpenid />}
         </button>
 
-        <div className="p-2">
-          <h2 className="text-2xl my-2 font-bold">User Information</h2>
+        <div className="p-2 flex flex-col items-left w-[360px] md:w-[600px] border">
+          <h2 className="text-2xl my-2 font-bold text-center">User Information</h2>
+          <p className="text-xl">Account: {account}</p>
           <p className="text-xl">Points: {user.points}</p>
-          <p className="text-xl">Purchased Products: {user.purchasedProducts.join(", ")}</p>
-          <p className="text-xl">Claimed Rewards: {user.claimedRewards.join(", ")}</p>
+          <p className="text-xl">Purchased Products:</p>
+          <ul>
+            {products.map((product, index) => (
+              <li key={index} className="text-sm text-blue-500">
+                Name: {product.name}, Price: {ethers.utils.formatEther(product.price)} ETH
+              </li>
+            ))}
+          </ul>
+          <p className="text-xl">Claimed Rewards:</p>
+          <ul>
+            {rewards.map((reward, index) => (
+              <li key={index}>
+                {reward.description} - {reward.pointsRequired} points
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

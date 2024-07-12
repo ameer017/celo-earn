@@ -7,10 +7,11 @@ async function main() {
   console.log(`Deploying contracts with account: ${deployer.address}`);
   console.log(`Account balance: ${balance.toString()}`);
 
-  const initialPointsPerPurchase = 10; // Set your initial points per purchase
+  const initialPointsPerPurchase = 5;
+  const rewardThreshold = 10;
 
   const Shop = await ethers.getContractFactory("DecentralizedShop");
-  const shop = await Shop.deploy(initialPointsPerPurchase);
+  const shop = await Shop.deploy(initialPointsPerPurchase, rewardThreshold);
 
   await shop.deployed();
 
@@ -23,8 +24,6 @@ async function main() {
 
   // Adjust the path as per your project structure
   fs.writeFileSync("../Shop.json", JSON.stringify(data, null, 2));
-
-  console.log("ABI and address saved to ./src/Shop.json");
 }
 
 main()

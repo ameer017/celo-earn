@@ -1,45 +1,32 @@
-import { ethers } from "ethers";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import contract from "../contract";
 import Sidebar from "./SideBar";
 import { FaOpenid } from "react-icons/fa6";
+import contract from "../contract";
 
-const AddProduct = () => {
-  const [name, setName] = useState("");
+const AddReward = () => {
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [pointsRequired, setPointsRequired] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const addProduct = async (e) => {
+  const addReward = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const tx = await contract.addProduct(
-        name,
+      const tx = await contract.addReward(
         description,
-        ethers.utils.parseEther(price)
+        parseInt(pointsRequired)
       );
       await tx.wait();
-      setMessage("Product added successfully!");
-
-      const defaultRewardDescription = `Reward for purchasing ${name}`;
-      const defaultPointsRequired = 5;
-      const rewardTx = await contract.addReward(
-        defaultRewardDescription,
-        defaultPointsRequired
-      );
-      await rewardTx.wait();
       setMessage("Reward added successfully!");
-
-      navigate("/product-page");
+      navigate("/reward-page");
     } catch (error) {
       setLoading(false);
       console.error(error);
-      setMessage("Failed to add product or reward");
+      setMessage("Failed to add reward");
     }
   };
 
@@ -59,36 +46,29 @@ const AddProduct = () => {
           {sidebarOpen ? "" : <FaOpenid />}
         </button>
         <div className="p-4 flex flex-col items-center h-[80vh] justify-center">
-          <h2 className="text-2xl font-bold mb-4">Add New Product.</h2>
+          <h2 className="text-2xl font-bold mb-4">Add New Reward.</h2>
           <form
-            onSubmit={addProduct}
+            onSubmit={addReward}
             className="flex flex-col w-[300px] md:w-[500px] "
           >
-            <input
-              type="text"
-              placeholder="Product Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mb-2 p-2 border rounded"
-            />
             <textarea
-              placeholder="Product Description"
+              placeholder="Reward Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mb-2 p-2 border rounded"
             />
             <input
-              type="text"
-              placeholder="Product Price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              type="number"
+              placeholder="Points Required"
+              value={pointsRequired}
+              onChange={(e) => setPointsRequired(e.target.value)}
               className="mb-2 p-2 border rounded"
             />
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded"
             >
-              {loading ? "Adding product" : "Add Product"}
+              {loading ? "Adding reward" : "Add Reward"}
             </button>
 
             <p>{message}</p>
@@ -99,4 +79,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddReward;

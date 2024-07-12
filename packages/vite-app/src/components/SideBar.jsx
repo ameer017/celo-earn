@@ -42,6 +42,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         >
           Reward{" "}
         </NavLink>
+        {/* <NavLink
+          to="/add-reward"
+          onClick={toggleSidebar}
+          className={({ isActive }) =>
+            isActive ? "text-yellow-500 font-bold text-xl " : "text-white"
+          }
+        >
+          Add Reward{" "}
+        </NavLink> */}
         <NavLink
           to="/user-info"
           onClick={toggleSidebar}

@@ -1,5 +1,5 @@
 {
-  "address": "0x07925C60408D5cca887a145d27eb1b8265FC3C16",
+  "address": "0x2fAfe999c0A253886A07595D8b8Ae7CD1303b706",
   "abi": [
     {
       "type": "constructor",
@@ -8,6 +8,10 @@
         {
           "type": "uint256",
           "name": "_pointsPerPurchase"
+        },
+        {
+          "type": "uint256",
+          "name": "_rewardThreshold"
         }
       ]
     },
@@ -90,6 +94,28 @@
         {
           "type": "address",
           "name": "claimer",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "RewardWithdrawn",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "id",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "claimer",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "amount",
           "indexed": false
         }
       ]
@@ -428,7 +454,37 @@
     },
     {
       "type": "function",
+      "name": "redeemReward",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_rewardId"
+        },
+        {
+          "type": "uint256",
+          "name": "_amount"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
       "name": "rewardCounter",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "rewardThreshold",
       "constant": true,
       "stateMutability": "view",
       "payable": false,
