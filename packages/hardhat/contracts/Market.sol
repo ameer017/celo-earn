@@ -139,9 +139,9 @@ contract DecentralizedShop {
         require(reward.claimer == msg.sender, "You did not claim this reward");
         require(reward.isClaimed, "Reward is not claimed");
 
-        payable(msg.sender).transfer(_amount);
-
         emit RewardWithdrawn(_rewardId, msg.sender, _amount);
+
+        payable(msg.sender).transfer(_amount);
     }
 
     function getReward(uint256 _rewardId) public view returns (Reward memory) {

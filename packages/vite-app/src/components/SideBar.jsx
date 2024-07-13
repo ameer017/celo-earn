@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
-      className={`fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform h-[90vh] ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
+      className={`fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform h-[86vh] ${
+        isOpen ? "translate-x-0 translate-y-[4rem] h-[88vh] md:translate-y-0 " : "-translate-x-full"
       } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
     >
       <div className="flex justify-between items-center p-4 md:hidden">
@@ -42,15 +42,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         >
           Reward{" "}
         </NavLink>
-        {/* <NavLink
-          to="/add-reward"
-          onClick={toggleSidebar}
-          className={({ isActive }) =>
-            isActive ? "text-yellow-500 font-bold text-xl " : "text-white"
-          }
-        >
-          Add Reward{" "}
-        </NavLink> */}
         <NavLink
           to="/user-info"
           onClick={toggleSidebar}

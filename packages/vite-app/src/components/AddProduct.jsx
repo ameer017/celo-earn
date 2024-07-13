@@ -14,6 +14,7 @@ const AddProduct = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+
   const addProduct = async (e) => {
     e.preventDefault();
     try {
@@ -34,7 +35,6 @@ const AddProduct = () => {
       );
       await rewardTx.wait();
       setMessage("Reward added successfully!");
-
       navigate("/product-page");
     } catch (error) {
       setLoading(false);
@@ -84,9 +84,11 @@ const AddProduct = () => {
               onChange={(e) => setPrice(e.target.value)}
               className="mb-2 p-2 border rounded"
             />
+            
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded"
+              id="list-button"
             >
               {loading ? "Adding product" : "Add Product"}
             </button>

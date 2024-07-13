@@ -4,6 +4,11 @@ import contract from "../contract";
 import Sidebar from "./SideBar";
 import { FaOpenid } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { GetIpfsUrlFromPinata } from "../../utils/utils";
+
+
+
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -19,6 +24,9 @@ const ProductList = () => {
     };
     fetchProducts();
   }, []);
+
+
+
 
   const purchaseProduct = async (productId, price) => {
     try {

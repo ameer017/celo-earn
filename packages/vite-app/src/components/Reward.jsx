@@ -26,7 +26,7 @@ const ClaimReward = () => {
           pointsRequired: ethers.BigNumber.from(
             reward.pointsRequired
           ).toNumber(),
-          isClaimed: reward.isClaimed, // Assuming isClaimed is part of the reward object
+          isClaimed: reward.isClaimed,
         }));
         setRewards(formattedRewards);
       } catch (error) {
@@ -48,7 +48,7 @@ const ClaimReward = () => {
       const formatRewards = updatedRewards.map((reward) => ({
         ...reward,
         pointsRequired: ethers.BigNumber.from(reward.pointsRequired).toNumber(),
-        isClaimed: reward.isClaimed, // Assuming isClaimed is part of the reward object
+        isClaimed: reward.isClaimed,
       }));
       setRewards(formatRewards);
     } catch (error) {
@@ -60,11 +60,28 @@ const ClaimReward = () => {
   };
 
   const redeemReward = async (rewardId) => {
+    console.log(rewardId);
+
+    const reward = await contract.getReward(rewardId);
+    console.log("Reward Data:", reward);
+
     try {
       setRedeemingReward(true);
 
-      // Manually set a gas limit
-      const gasLimit = 1000000; // Adjust this value as needed
+      let gasEstimate;
+      try {
+        gasEstimate = await contract.estimateGas.redeemReward(
+          rewardId,
+          redeemAmount
+        );
+        console.log("Estimated Gas:", gasEstimate.toString());
+      } catch (error) {
+        console.error("Gas estimation failed:", error);
+        setMessage("Failed to estimate gas. Using default gas limit.");
+        gasEstimate = ethers.BigNumber.from(1000000);
+      }
+
+      const gasLimit = gasEstimate.toNumber() + 10000;
 
       const tx = await contract.redeemReward(rewardId, redeemAmount, {
         gasLimit,
@@ -77,15 +94,18 @@ const ClaimReward = () => {
       const formatRewards = updatedRewards.map((reward) => ({
         ...reward,
         pointsRequired: ethers.BigNumber.from(reward.pointsRequired).toNumber(),
-        isClaimed: reward.isClaimed, // Assuming isClaimed is part of the reward object
+        isClaimed: reward.isClaimed,
       }));
       setRewards(formatRewards);
       setRedeemAmount(0);
     } catch (error) {
       console.error("Failed to redeem reward:", error);
 
-      // Handle specific error cases
-      if (error.code === ethers.errors.UNPREDICTABLE_GAS_LIMIT) {
+      if (error.code === ethers.errors.CALL_EXCEPTION) {
+        setMessage(
+          "Failed to redeem reward: The transaction was reverted. Please ensure you meet all requirements to redeem the reward."
+        );
+      } else if (error.code === ethers.errors.UNPREDICTABLE_GAS_LIMIT) {
         setMessage(
           "Failed to redeem reward: Unpredictable gas limit. Please try again or check your parameters."
         );
@@ -118,11 +138,18 @@ const ClaimReward = () => {
         </button>
         <div className="flex flex-col items-center ">
           <h1 className="text-3xl my-4 font-bold">Claim and Redeem Rewards</h1>
+          {rewards.length > 0 ? (
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
             {rewards.map((reward, index) => (
-              <div key={index} className="border p-4 rounded-lg shadow-lg flex flex-col">
+              <div
+                key={index}
+                className="border p-4 rounded-lg shadow-lg flex flex-col"
+              >
                 <h3 className="my-2 text-[15px] ">{reward.description}</h3>
-                <p className="my-2 font-bold">Points Required: {reward.pointsRequired}</p>
+                <p className="my-2 font-bold">
+                  Points Required: {reward.pointsRequired}
+                </p>
                 {!reward.isClaimed && (
                   <button
                     onClick={() => claimReward(reward.id)}
@@ -156,6 +183,10 @@ const ClaimReward = () => {
               </div>
             ))}
           </div>
+          ) : 
+          (
+            <p>No reward yet!.. Buy any product to get rewarded 😊</p>
+          )}
         </div>
       </div>
     </div>

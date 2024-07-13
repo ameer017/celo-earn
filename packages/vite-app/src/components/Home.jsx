@@ -6,7 +6,7 @@ const HeroSection = () => {
   const { account } = useAccount();
 
   return (
-    <section className="bg-gray-100 text-gray-800 p-8 text-center min-h-[85vh] flex flex-col items-center justify-center ">
+    <section className="bg-gray-100 text-gray-800 p-8 text-center min-h-[87vh] flex flex-col items-center justify-center ">
       <h2 className="text-3xl font-bold">Celo Shop</h2>
 
       <p className="text-sm">Shop Smart, Earn Rewards!</p>
