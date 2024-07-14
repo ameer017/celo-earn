@@ -85,7 +85,7 @@ const UserInfo = () => {
           <ul>
             {products.map((product, index) => (
               <li key={index} className="text-sm text-blue-500">
-                Name: {product.name}, Price: {ethers.utils.formatEther(product.price)} ETH
+                Name: {product.name}, Price: {ethers.utils.formatEther(product.price)} CELO
               </li>
             ))}
           </ul>

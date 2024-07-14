@@ -72,7 +72,7 @@ const ProductList = () => {
                 <h3 className="text-2xl mb-2">{product.name}</h3>
                 <p className="text-[15px] font-normal">{product.description}</p>
                 <p className="font-bold my-2">
-                  {ethers.utils.formatEther(product.price)} ETH
+                  {ethers.utils.formatEther(product.price)} CELO
                 </p>
 
                 <button
